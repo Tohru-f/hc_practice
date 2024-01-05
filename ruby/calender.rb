@@ -53,6 +53,8 @@ if month.empty? #オプション指定がなかった場合
     end
   end
 
+  puts #最終日付の後に%が表示されてしまうので改行して防ぐ
+
 elsif month[0].between?(1,12) #オプションの月が１〜１２月で正しく指定された場合
   first_date = Date.new(2024, month[0], 1)
   last_date = Date.new(2024, month[0], -1)
@@ -94,6 +96,8 @@ elsif month[0].between?(1,12) #オプションの月が１〜１２月で正し�
       puts
     end
   end
+
+  puts #最終日付の後に%が表示されてしまうので改行して防ぐ
 
 else #指定されたオプションが１〜１２月を外れていた場合
   puts "#{month[0]} is neither a month number (1..12) nor a name"
