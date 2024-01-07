@@ -3,7 +3,7 @@ require 'optparse'
 
 month = []
 opt = OptionParser.new
-opt.on('-m int'){|v| month << v.to_i}
+opt.on('-m int') { |v| month << v.to_i }
 
 opt.parse!(ARGV)
 puts
@@ -11,94 +11,40 @@ puts
 dates = []
 today = Date.today
 
-if month.empty? #オプション指定がなかった場合
-  first_date = Date.new(2024, today.month, 1)
-  last_date = Date.new(2024, today.month, -1)
+# monthは空？空であれば今月の月を空でなければ指定された月をmonthに入れる
+month = month.empty? ? today.month : month[0]
 
-  first_date.upto(last_date) {|n| dates << n}
+# monthの値が1〜12月の場合
+if month.between?(1, 12)
+  first_date = Date.new(2024, month, 1)
+  last_date = Date.new(2024, month, -1)
 
-  print '      ' + first_date.month.to_s + '月' + ' ' + first_date.year.to_s
-
-  puts
-  print '月 火 水 木 金 土 日'
-  puts 
-
-  #スタート位置を初日の曜日を確認することで決める
-  if first_date.wday == 0
-    print '                  '
-  elsif first_date.wday == 1
-    print ''
-  elsif first_date.wday == 2
-    print '   '
-  elsif first_date.wday == 3
-    print '      '
-  elsif first_date.wday == 4
-    print '         '
-  elsif first_date.wday == 5
-    print '            '
-  elsif first_date.wday == 6
-    print '               '
-  end
-
-  #日付の出力
-  dates.each do |date|
-    if date.mday <= 9 #日付が一桁の場合は頭にスペースを入れる
-      print ' '
-    end
-    
-    print date.mday
-    print ' '
-    if date.wday == 0 #日曜日の場合は改行を入れる
-      puts
-    end
-  end
-
-  puts #最終日付の後に%が表示されてしまうので改行して防ぐ
-
-elsif month[0].between?(1,12) #オプションの月が１〜１２月で正しく指定された場合
-  first_date = Date.new(2024, month[0], 1)
-  last_date = Date.new(2024, month[0], -1)
-
-  first_date.upto(last_date) {|n| dates << n}
+  first_date.upto(last_date) { |n| dates << n }
 
   print '      ' + first_date.month.to_s + '月' + ' ' + first_date.year.to_s
 
   puts
   print '月 火 水 木 金 土 日'
-  puts 
+  puts
 
-  #スタート位置を初日の曜日を確認することで決める
-  if first_date.wday == 0
-    print '                  '
-  elsif first_date.wday == 1
-    print ''
-  elsif first_date.wday == 2
-    print '   '
-  elsif first_date.wday == 3
-    print '      '
-  elsif first_date.wday == 4
-    print '         '
-  elsif first_date.wday == 5
-    print '            '
-  elsif first_date.wday == 6
-    print '               '
-  end
+  # スタート位置を初日の曜日を確認することで決める
+  space = -1 + first_date.wday.to_i
+  space = space.negative? ? 6 : space
 
-  #日付の出力
+  print '   ' * space # 曜日ごとに半角スペース✖️3の位置変更を入れる
+
+  # 日付の出力
   dates.each do |date|
-    if date.mday <= 9 #日付が一桁の場合は頭にスペースを入れる
-      print ' '
-    end
-    
-    print date.mday
+    print date.mday.to_s.rjust(2) # 2桁に揃える
     print ' '
-    if date.wday == 0 #日曜日の場合は改行を入れる
+
+    if date.wday.zero? # 日曜日の場合は改行を入れる
       puts
     end
   end
 
-  puts #最終日付の後に%が表示されてしまうので改行して防ぐ
+  puts # 最終日付の後に%が表示されてしまうので改行して防ぐ
 
-else #指定されたオプションが１〜１２月を外れていた場合
-  puts "#{month[0]} is neither a month number (1..12) nor a name"
+else # 指定されたオプションが１〜１２月を外れていた場合
+  puts "#{month} is neither a month number (1..12) nor a name"
 end
