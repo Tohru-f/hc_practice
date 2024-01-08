@@ -1,38 +1,26 @@
 rules = gets.chomp.split(',')
 players = gets.chomp.split(',')
 
+SCORE_MAPPING = {
+  4 => 'コンドル',
+  3 => 'アルバトロス',
+  2 => 'イーグル',
+  1 => 'バーディ',
+  0 => 'パー',
+  -1 => 'ボギー',
+}
+
 for number in 0..17 do
   difference = rules[number].to_i - players[number].to_i
 
-  if rules[number].to_i == 5
-    if players[number].to_i == 2
-      score = 'アルバトロス'
-    elsif players[number].to_i == 1
-      score = 'コンドル'
-    elsif difference == -1
-      score = 'ボギー'
-    elsif difference <= -2
-      score = "#{difference * (-1)}ボギー"
-    elsif difference.zero?
-      score = 'パー'
-    elsif difference == 1
-      score = 'バーディ'
-    elsif difference == 2
-      score = 'イーグル'
-    end
-  else
+  score = SCORE_MAPPING[difference]
+  score = difference <= -2 ? "#{difference * (-1)}ボギー" : SCORE_MAPPING[difference]
+
+  # score = rules[number].to_i < 5 ? (players[number].to_i == 1 ?  'ホールインワン' : SCORE_MAPPING[difference]) : SCORE_MAPPING[difference];
+  
+  if rules[number].to_i < 5
     if players[number].to_i == 1
       score = 'ホールインワン'
-    elsif difference == -1
-      score = 'ボギー'
-    elsif difference <= -2
-      score = "#{difference * (-1)}ボギー"
-    elsif difference.zero?
-      score = 'パー'
-    elsif difference == 1
-      score = 'バーディ'
-    elsif difference == 2
-      score = 'イーグル'
     end
   end
 
