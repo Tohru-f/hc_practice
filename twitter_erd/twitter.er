@@ -1,0 +1,63 @@
+[users] {bgcolor: "#d0e0d0"}
+*id {label: "bigint, not null" }
+email {label: "varchar, not null, uniq" }
+user_name {label: "varchar, not null, uniq" }
+telephone_number {label: "not null, uniq" }
+name_on_display{label: "varchar, not null" }
+profile {label: "varchar" }
+location {label: "varchar" }
+website {label: "varchar" }
+birthday {label: "datetime" }
+profile_picture {label: "blob" }
+avator_picture {label: "blob" }
+created_at {label: "datetime, not null" }
+updated_at {label: "datetime, not null" }
+
+[tweets]
+*id {label: "bigint, not null" }
+user_id {label: "bigint, not null, FK(users)" }
+description {label: "varchar(140), not null" }
+good {label: "bigint" } #いいねした人のidが入ると考える。集計すればいいねの総数が分かる
+retweet {label: "bigint " } #リツイートした人の投稿者idが入ると考える。集計すればリツイートの総数が分かる
+created_at {label: "datetime, not null" }
+updated_at {label: "datetime, not null" }
+
+[follows]
+*id {label: "bigint, not null" }
+user_id {label: "bigint, not null, FK(users)" }
+follow {label: "bigint" } #フォロー対象者のidが入ると考える。集計すればフォローの総数が分かる
+created_at {label: "datetime, not null" }
+updated_at {label: "datetime, not null" }
+
+[messages]
+*id {label: "bigint, not null" }
+user_id {label: "bigint, not null, FK(users)" }
+direct_message {label: "varchar" }
+created_at {label: "datetime, not null" }
+updated_at {label: "datetime, not null" }
+
+[notices]
+*id {label: "bigint, not null" }
+user_id {label: "bigint, not null, FK(users)" }
+notice {label: "bigint" } #いいねやフォローした人のidが入ると考える。集計すればいいねの総数が分かる
+created_at {label: "datetime, not null" }
+updated_at {label: "datetime, not null" }
+
+[bookmarks]
+*id {label: "bigint, not null" }
+user_id {label: "bigint, not null, FK(users)" }
+tweet_id {label: "bigint " } #bookmarkするツイートのidが入ると考える。集計すればbookmarkの総数が分かる
+created_at {label: "datetime, not null" }
+updated_at {label: "datetime, not null" }
+
+
+# Cardinality     Syntax
+# 0 or 1          ?
+# exactly 1       1
+# 0 or more       *
+# 1 or more       +
+users 1--* `tweets`
+users 1--* `follows`
+users 1--* `messages`
+users 1--* `notices`
+users 1--* `bookmarks`
